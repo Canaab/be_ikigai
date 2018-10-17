@@ -1,1 +1,1 @@
-# be_ikigai
+# Project IKIGAI ISEN
