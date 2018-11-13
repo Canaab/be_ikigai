@@ -4,7 +4,8 @@
   "description": "This student project is about to automatically generate IKIGAI template from informations given.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "echo \"Test string IKIGAI server.\""
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,13 @@
   "bugs": {
     "url": "https://github.com/Canaab/be_ikigai/issues"
   },
-  "homepage": "https://github.com/Canaab/be_ikigai#readme"
+  "homepage": "https://github.com/Canaab/be_ikigai#readme",
+  "dependencies": {
+    "bluebird": "^3.5.3",
+    "jsonwebtoken": "^8.3.0",
+    "moleculer": "^0.13.4",
+    "moleculer-repl": "^0.5.2",
+    "moleculer-web": "^0.8.3",
+    "mongodb": "^3.1.9"
+  }
 }

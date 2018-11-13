@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+
+  mongodb:
+    container_name: mongo
+    image: mongo
+
+  node:
+    container_name: server
+    build:
+      context: .
+      dockerfile: node.dockerfile
+    ports:
+    - "3000:3000"
+    links:
+      - mongodb
