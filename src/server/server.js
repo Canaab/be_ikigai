@@ -6,8 +6,8 @@ const broker = new ServiceBroker({
 	hotReload: true
 });
 
-broker.loadServices('./src/server/api');
-broker.loadServices('./src/server/implementation');
-broker.loadServices('./src/server/services');
+broker.loadServices('./services/api');
+broker.loadServices('./services/implementation');
+broker.loadServices('./services/micro');
 
 broker.start().then(() => broker.repl());

@@ -2,9 +2,9 @@
   "name": "be_ikigai",
   "version": "0.0.1",
   "description": "This student project is about to automatically generate IKIGAI template from informations given.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node server.js",
     "test": "echo \"Test string IKIGAI server.\""
   },
   "repository": {
