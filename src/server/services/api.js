@@ -1,7 +1,7 @@
 const ApiGateway = require('moleculer-web');
 
 module.exports = {
-	name: "RestAPI",
+	name: "@api",
 
 	mixins: [ApiGateway],
 
@@ -26,19 +26,19 @@ module.exports = {
 		routes: [
 			// Get information on server status
 			{
-				path: "/status/",
+				path: "/status",
 				aliases: {
-					"GET health": "application.health",
-					"GET db": "access.db"
+					"GET /health": "@application.#gateway/get-server-health",
+					"GET /db": "@application.#gateway/get-db-health"
 				}
 			},
 
 			// Public routes
 			{
-				path: "/public/",
+				path: "/public",
 
 				aliases: {
-					"GET login": "access.login",
+					"GET /login": "@user.#gateway/login"
 				}
 			},
 
@@ -50,10 +50,23 @@ module.exports = {
 
 				authorization: true,
 
-				path: "/private/",
+				path: "/private",
 
 				aliases: {
-					"POST exemple": "service.action",
+					"POST /test": "@user.#gateway/test",
+				}
+			},
+
+			// Webhook
+			{
+				bodyParsers: {
+					json: true
+				},
+
+				path: '/webhook',
+
+				aliases: {
+					"POST /": "@chatbot.#gateway/webhook"
 				}
 			}
 		]
@@ -61,11 +74,10 @@ module.exports = {
 
 	methods: {
 		authorize(ctx, route, req, res) {
-			return ctx.call('auth.verify', req.body)
-				.then(response => {
-					console.log(response);
-					return Promise.resolve(ctx);
-				})
+			ctx.meta.headers = {};
+			Object.keys(req.headers).forEach(key => ctx.meta.headers[key] = req.headers[key]);
+			return ctx.call('@auth.#gateway/verify-api-key')
+				.then(() => Promise.resolve(ctx));
 		}
 	}
 };
