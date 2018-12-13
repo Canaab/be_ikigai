@@ -19,7 +19,7 @@ module.exports = {
 					.then(user_db => user_db ?
 						ctx.call("@user.#factory/update-recall-date", { fb_id: user_db.fb_id, value: 0 })
 						: ctx.call("@user.#entity/create", ctx.params)
-							.then(new_user => ctx.call("@user.#factory/insert", { new_user }))
+							.then(new_user => ctx.call("@user.#factory/insert", { user: new_user }))
 					)
 			}
 		},
