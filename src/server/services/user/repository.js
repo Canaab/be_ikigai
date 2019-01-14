@@ -2,9 +2,7 @@ module.exports = {
 	actions: {
 		"#repository/get": {
 			params: {
-				// id
-				// fb_id
-				// name
+				fb_id: "string"
 			},
 
 			handler(ctx) {

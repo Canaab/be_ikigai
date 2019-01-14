@@ -65,8 +65,11 @@ module.exports = {
 
 				path: '/webhook',
 
+				authorization: true,
+
 				aliases: {
-					"POST /": "@chatbot.#gateway/webhook"
+					"POST /": "@chatbot.#gateway/webhook",
+					"GET /": "@auth.#gateway/respond-to-challenge"
 				}
 			}
 		]
@@ -74,10 +77,16 @@ module.exports = {
 
 	methods: {
 		authorize(ctx, route, req, res) {
-			ctx.meta.headers = {};
-			Object.keys(req.headers).forEach(key => ctx.meta.headers[key] = req.headers[key]);
-			return ctx.call('@auth.#gateway/verify-api-key')
-				.then(() => Promise.resolve(ctx));
+			if(req._body)
+				ctx.params = req.body;
+			else
+				ctx.params = req.query;
+
+			return Promise.resolve(ctx);
+			// ctx.meta.headers = {};
+			// Object.keys(req.headers).forEach(key => ctx.meta.headers[key] = req.headers[key]);
+			// return ctx.call('@auth.#gateway/verify-api-key')
+			// 	.then(() => Promise.resolve(ctx));
 		}
 	}
 };

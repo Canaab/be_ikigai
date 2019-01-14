@@ -1,15 +1,15 @@
 module.exports = {
 	actions: {
-		"#tasks/sign-token": {
-			params: {},
+		// "#tasks/sign-token": {
+		// 	params: {},
+		//
+		// 	handler(ctx) {
+		// 		return ctx.call("@auth.#edge/sign")
+		// 			.catch(err => { throw new Error(err.toString()); })
+		// 	}
+		// },
 
-			handler(ctx) {
-				return ctx.call("@auth.#edge/sign")
-					.catch(err => { throw new Error(err.toString()); })
-			}
-		},
-
-		"#tasks/verify-and-create-user": {
+		"#tasks/verify-and-create": {
 			params: {
 				fb_id: "string"
 			},
@@ -33,6 +33,17 @@ module.exports = {
 			handler(ctx) {
 				return ctx.call("@user.#factory/update-recall-date", ctx.params)
 			}
-		}
+		},
+
+		// "#tasks/set-score": {
+		// 	params: {
+		// 		fb_id: "string",
+		// 		score: "number"
+		// 	},
+		//
+		// 	handler(ctx) {
+		// 		return ctx.call("@mongo.#edge/update-user-forces", ctx.params)
+		// 	}
+		// }
 	}
 }

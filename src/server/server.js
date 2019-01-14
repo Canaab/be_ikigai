@@ -5,6 +5,7 @@ moment.locale('fr');
 
 const broker = new ServiceBroker({
 	// Options
+	metrics: true,
 	logger: true,
 	logFormatter: 'simple'
 });
@@ -24,5 +25,4 @@ broker.start().then(() => {
 				broker.stop();
 			}
 		})
-
 });
