@@ -22,33 +22,37 @@ module.exports = {
 		"#tasks/send": {
 			params: {
 				recipient: "object",
-				text: "string"
+				replies: "array"
 			},
 
 			handler(ctx) {
-				const { recipient, text, replies } = ctx.params;
-				const pre = {
+				const { recipient, text, attachment, replies } = ctx.params;
+				const request_params = {
 					method: "POST",
 					url: `https://graph.facebook.com/v2.6/me/messages?access_token=${page_access_token}`
 				}
-				const message = { text };
+
+				const responses = [Object.assign({ data: { recipient, message: { text } }}, request_params)];
 
 				if(!ctx.params.no_quit_button)
 					replies.push({ title: '➡️Quitter', intent: 'EoD-intent'} );
 
 				// 'quick_replies' rather not defined than empty
 				if(replies.length > 0)
-					message.quick_replies = replies.map(qr => ({
+					responses[0].data.message.quick_replies = replies.map(qr => ({
 						title: qr.title,
 						content_type: "text",
 						payload: qr.intent || '',
 					}));
 
+				if(attachment)
+					responses.unshift(Object.assign({ data: { recipient, message: { attachment } }}, request_params));
+
 				return Promise
 					.resolve([
 						// Mark as seen
 						{
-							...pre,
+							...request_params,
 							data: {
 								recipient,
 								sender_action: "mark_seen"
@@ -56,19 +60,25 @@ module.exports = {
 						},
 						// // Typing ON
 						{
-							...pre,
+							...request_params,
 							data: {
 								recipient,
 								sender_action: "typing_on"
 							}
 						},
-						// Response
+						// Responses
+						...responses,
+						// Typing off
 						{
-							...pre,
-							data: { recipient, message }
-						}
+							...request_params,
+							data: {
+								recipient,
+								sender_action: "typing_off"
+							}
+						},
 					])
 					.mapSeries((query) => request(query))
+					.catch(e => console.error(e));
 			}
 		},
 
@@ -129,7 +139,6 @@ module.exports = {
 				const params = {
 					speech_name: '',
 					recipient: { id: fb_id },
-					text: '',
 					replies: []
 				};
 				let call = () => Promise.resolve();
@@ -200,10 +209,10 @@ module.exports = {
 
 				return call()
 					.then(() => {
-						if(params.speech_name.length === 0) // Unable to understand demand
+						if (params.speech_name.length === 0)
 							this.setUpMainMenu(params, "text_misunderstood");
 
-						return ctx.call("@mongo.#edge/get-speech", { name: params.speech_name })
+							return ctx.call("@mongo.#edge/get-speech", {name: params.speech_name})
 								.then(text => {
 									params.text = text;
 									delete params.speech_name;
@@ -211,14 +220,27 @@ module.exports = {
 									this.logger.info("DATA TO SEND :", params);
 									return ctx.call("@chatbot.#tasks/send", params);
 								})
-						}
-					)
+					})
 			}
 		}
 	},
 
 	methods: {
 		setUpMainMenu(params, speech_name) {
+			if(speech_name === "text_info_ikigai") {
+				params.attachment = {
+					"type": "template",
+					"payload": {
+						"template_type": "media",
+						"elements": [
+							{
+								"media_type": "video",
+								"url": "https://business.facebook.com/welcometojapan.co.jp/videos/375195009717092/"
+							}
+						]
+					}
+				}
+			}
 			params.speech_name = speech_name;
 			params.replies = [
 				{
