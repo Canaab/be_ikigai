@@ -1,0 +1,67 @@
+[
+  {
+    "name": "text_hello",
+    "value": "Salut ! 👋\n\nAlors toi aussi tu es un peu perdu dans toutes ces formations, ces métiers, ces responsabilités possibles pour ta vie ? Tu aimerais un coup de pouce pour poursuivre tes rêves ou tes passions, tout en respectant tes valeurs et arriver à manger 3 fois par jour ?\n\nEt bien ISENkigAI est là pour t’aider à trouver ta route ! 😎\n\nGrâce à la méthode IKIGAI, je suis capable de t'aider à t'orienter en quelques minutes ! Pour cela, il faudra répondre à quelques questions ouvertes, avec le plus de détails possibles ! Plus j'en reçois, plus je suis efficace ! 💪"
+  },
+
+  {
+    "name": "text_misunderstood",
+    "value": "Je n'ai pas bien compris votre demande 🧐\n\nMenu principal :"
+  },
+  {
+    "name": "text_eod",
+    "value": "D'accord on s'arrête ici, veux-tu reprogrammer notre échange ? 😇\nJ'ai besoin de plus pour te connaître ! 🤓"
+  },
+  {
+    "name": "text_info_ikigai",
+    "value": "TEXTE INFO IKIGAI\n\nMenu principal :"
+  },
+  {
+    "name": "text_info_project",
+    "value": "ISENkigAI est un projet d'étudiants de l'ISEN Toulon, qui vise à aider les lycéens ou étudiants qui ne parviennent pas à trouver une formation, ou simplement une inspiration pour un futur métier ! 💼\n\nJe suis donc un robot 🤖 qui s'appuie sur la méthode IKIGAI, afin de comprendre au maximum tes qualités, tes aspirations, ainsi que tes valeurs, pour trouver, à l'aide de la base de données d'ONISEP, une formation qui t'est adaptée ! 🔥"
+  },
+  {
+    "name": "text_10yo_enjoy",
+    "value": "👶 Remémore-toi ton kiff quand tu avais 10 ans...\nDécris-le avec le plus de détails possible !"
+  },
+  {
+    "name": "text_be_animal",
+    "value": "🐶🐱 Si tu étais un animal...\nQue serais-tu ? Pourquoi ? "
+  },
+  {
+    "name": "text_perso_inspi",
+    "value": "🤩 Quelles sont les personnalités qui t'inspirent ? Pourquoi ?\n\n(Personnages fictifs autorisés)"
+  },
+  {
+    "name": "text_wrath",
+    "value": "😡 Qu'est-ce qui te met en colère ? Pourquoi ?"
+  },
+  {
+    "name": "text_better_world",
+    "value": "🌍 Selon toi, que faudrait-il pour que le Monde aille mieux ? Pourquoi ?"
+  },
+  {
+    "name": "text_friend_feedback",
+    "value": "🙋‍♀️🙋‍♂️ Demande à un ami de te donner tes trois principales qualités, donne-les moi en un message !"
+  },
+  {
+    "name": "text_well_received",
+    "value": "Super ! 👍\n\nClique sur 'Continuer' pour passer à la suite ! 👊"
+  },
+  {
+    "name": "text_link_to_app",
+    "value": "Lien vers l'application pour connaître ton résultat : 😱 (WIP)"
+  },
+  {
+    "name": "text_recall",
+    "value": "Ok, je te recontacte à ce moment 😉"
+  },
+  {
+    "name": "text_never_recall",
+    "value": "Je suis si triste que tu t'en ailles 😭\nN'hésite pas à me recontacter si tu veux recommencer l'aventure ! 🏔"
+  },
+  {
+    "name": "text_main_menu",
+    "value": "🌀Menu principal :"
+  }
+]

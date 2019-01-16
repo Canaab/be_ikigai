@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+
+  mongodb:
+    container_name: mongo
+    image: mongo
+
+  node:
+    container_name: server
+    build: src/server
+    ports:
+    - "3000:3000"
+    links:
+      - mongodb
+
+  angular:
+    container_name: app
+    build: src/webapp
+    ports:
+      - "4200:4200"
