@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const { private_key, fb_challenge_token } = require('../../../../config/config.json');
+const { private_key, fb_challenge_token } = require('../../config/config.json');
 
 module.exports = {
 	actions: {

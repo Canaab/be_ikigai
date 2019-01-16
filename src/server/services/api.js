@@ -71,6 +71,14 @@ module.exports = {
 					"POST /": "@chatbot.#gateway/webhook",
 					"GET /": "@auth.#gateway/respond-to-challenge"
 				}
+			},
+			// fallback route /
+			{
+				path: "",
+
+				aliases: {
+					"GET /": "@application.#gateway/get"
+				}
 			}
 		]
 	},

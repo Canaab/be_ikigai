@@ -22,7 +22,6 @@ broker.start().then(() => {
 			}
 			else {
 				broker.logger.error("Unable to reach database server.");
-				broker.stop();
 			}
 		})
 });

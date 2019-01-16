@@ -1,8 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 // URL de connexion locale
-const { url_local, url_mongo } = require('../../../../../config/config.json');
-const url = process.env.DOCKERMODE ? url_mongo : url_local;
+const url = "mongodb://localhost:27017"
 
 module.exports = {
 	mixins: [

@@ -3,7 +3,7 @@ const { request } = require("axios");
 const Promise = require('bluebird');
 require('moment-round');
 
-const { page_access_token } = require('../../../../config/config.json');
+const { page_access_token } = require('../../config/config.json');
 const starter = [/^bonjour$/, /^salut$/, /^hello$/, /^démarrer$/, /^demarrer$/];
 
 module.exports = {
