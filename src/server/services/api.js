@@ -8,6 +8,8 @@ module.exports = {
 	settings: {
 		port: process.env.PORT || 3000,
 
+		path: '/api',
+
 		cors: {
 			// Configures the Access-Control-Allow-Origin CORS header.
 			origin: "*",
@@ -29,7 +31,8 @@ module.exports = {
 				path: "/status",
 				aliases: {
 					"GET /health": "@application.#gateway/get-server-health",
-					"GET /db": "@application.#gateway/get-db-health"
+					"GET /db": "@application.#gateway/get-db-health",
+					"GET /flask": "@ikigai.#gateway/get-flask-health"
 				}
 			},
 
