@@ -30,7 +30,7 @@
     "lodash": "^4.17.11",
     "moleculer": "^0.13.4",
     "moleculer-cron": "0.0.2",
-    "moleculer-repl": "^0.5.2",
+    "moleculer-repl": "^0.5.5",
     "moleculer-web": "^0.8.3",
     "moment": "^2.22.2",
     "moment-round": "^1.0.1",
