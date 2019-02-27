@@ -24,7 +24,8 @@ module.exports = {
 
 			handler(ctx) {
 				return ctx.call("@user.#tasks/find-jobs", ctx.params)
-					.then(jobs => ({ jobs }))
+					.then(res => ctx.call("@mongo.#edge/get-jobs", { ids: res })
+						.then(jobs => ({ jobs })))
 			}
 		},
 

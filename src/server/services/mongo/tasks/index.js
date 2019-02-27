@@ -7,6 +7,7 @@ module.exports = {
 	mixins: [
 		require('./init'),
 		require('./user'),
+		require('./jobs')
 	],
 
 	actions: {

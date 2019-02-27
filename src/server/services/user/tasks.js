@@ -41,6 +41,18 @@ module.exports = {
 							return user.result;
 						else
 							return ctx.call("@ikigai.#edge/process", { user })
+								.then(result => {
+									const params = {
+										...ctx.params,
+										update: {
+											'$set': { 'result': result }
+										}
+									};
+
+									ctx.call("@mongo.#edge/quick-update-user", params);
+
+									return result;
+								})
 					})
 			}
 		},

@@ -1,5 +1,8 @@
 module.exports = {
 	actions: {
+		/*
+			DB
+		 */
 		"#edge/init-db": {
 			params: {},
 
@@ -16,6 +19,10 @@ module.exports = {
 					.then(isConnected => ({ isConnected }))
 			}
 		},
+
+		/*
+			USER
+		 */
 
 		"#edge/get-user": {
 			params: {
@@ -48,17 +55,6 @@ module.exports = {
 			}
 		},
 
-		// "#edge/update-user-forces": {
-		// 	params: {
-		// 		fb_id: "string",
-		// 		score: "number"
-		// 	},
-		//
-		// 	handler(ctx) {
-		// 		return ctx.call("@mongo.#tasks/update-user-forces", ctx.params)
-		// 	}
-		// },
-
 		"#edge/get-users-to-recall": {
 			params: {},
 
@@ -67,24 +63,23 @@ module.exports = {
 			}
 		},
 
-		// "#edge/count-questions-forces": {
-		// 	params: {},
-		//
-		// 	handler(ctx) {
-		// 		return ctx.call("@mongo.#tasks/count-questions-forces")
-		// 	}
-		// },
+		/*
+			JOBS
+		 */
 
-		// "#edge/get-question": {
-		// 	params: {
-		// 		step: "number"
-		// 	},
-		//
-		// 	handler(ctx) {
-		// 		return ctx.call("@mongo.#tasks/get-question-from-step", ctx.params )
-		// 			.then(question => question.title)
-		// 	}
-		// },
+		"#edge/get-jobs": {
+			params: {
+				ids: "array"
+			},
+
+			handler(ctx) {
+				return ctx.call("@mongo.#tasks/get-jobs", ctx.params);
+			}
+		},
+
+		/*
+			CHATBOT
+		 */
 
 		"#edge/get-speech": {
 			params: {

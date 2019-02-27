@@ -1,4 +1,5 @@
 const speech_doc = require('../../../seeds/speech.json');
+const jobs_doc = require('../../../seeds/jobs.json');
 
 module.exports = {
 	actions: {
@@ -16,6 +17,7 @@ module.exports = {
 						return ctx.broker.mcall([
 							{ action: "@mongo.#tasks/init-user-collection", params: { db, opts } },
 							{ action: "@mongo.#tasks/init-ressources-collection", params: { db, opts, name: "speech", document: speech_doc } },
+							{ action: "@mongo.#tasks/init-ressources-collection", params: { db, opts, name: "jobs", document: jobs_doc } },
 						]).then(() => client.close())
 					})
 			}

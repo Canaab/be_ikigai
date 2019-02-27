@@ -11,9 +11,9 @@ def health():
 @app.route('/process', methods=['POST'])
 def process():
 	data = request.get_json()
-	print(type(data))
-	processed = processing(data)
+	print(data['user_data'])
+	processed = processing(data['user_data'])
 
-	res = { 'data': processed }
+	res = { 'processed': processed }
 
 	return jsonify(res)
