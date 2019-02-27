@@ -1,4 +1,5 @@
 const ApiGateway = require('moleculer-web');
+const has = require('lodash/has');
 
 module.exports = {
 	name: "@api",
@@ -36,15 +37,6 @@ module.exports = {
 				}
 			},
 
-			// Public routes
-			{
-				path: "/public",
-
-				aliases: {
-					"GET /login": "@user.#gateway/login"
-				}
-			},
-
 			// Private routes
 			{
 				bodyParsers: {
@@ -56,7 +48,7 @@ module.exports = {
 				path: "/private",
 
 				aliases: {
-					"POST /test": "@user.#gateway/test",
+					"POST /login": "@user.#gateway/login",
 				}
 			},
 
@@ -88,16 +80,12 @@ module.exports = {
 
 	methods: {
 		authorize(ctx, route, req, res) {
-			if(req._body)
-				ctx.params = req.body;
-			else
+			if(has(req, 'query') && Object.keys(req.query).length > 0)
 				ctx.params = req.query;
+			else
+				ctx.params = req.body;
 
 			return Promise.resolve(ctx);
-			// ctx.meta.headers = {};
-			// Object.keys(req.headers).forEach(key => ctx.meta.headers[key] = req.headers[key]);
-			// return ctx.call('@auth.#gateway/verify-api-key')
-			// 	.then(() => Promise.resolve(ctx));
 		}
 	}
 };

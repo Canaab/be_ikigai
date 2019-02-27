@@ -8,6 +8,7 @@ module.exports = {
 			handler(ctx) {
 				return {
 					fb_id: ctx.params.fb_id,
+					name: "",
 					progress: 0,
 					data: [
 						{ name: "10yo_memory", value: "" },
@@ -17,6 +18,7 @@ module.exports = {
 						{ name: "better_world", value: "" },
 						{ name: "friend_feedback", value: "" }
 					],
+					result: [],
 					recall_date: new Date(0)
 				}
 			}

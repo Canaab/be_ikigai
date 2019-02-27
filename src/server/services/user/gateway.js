@@ -1,10 +1,12 @@
 module.exports = {
 	actions: {
 		"#gateway/login": {
-			params: {},
+			params: {
+				fb_id: "string"
+			},
 
 			handler(ctx) {
-				return ctx.call("@user.#edge/login");
+				return ctx.call("@user.#edge/login", ctx.params);
 			}
 		},
 
