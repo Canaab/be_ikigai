@@ -29,6 +29,22 @@ module.exports = {
 			}
 		},
 
+		"#tasks/find-jobs": {
+			params: {
+				fb_id: "string"
+			},
+
+			handler(ctx) {
+				return ctx.call("@user.#repository/get", ctx.params)
+					.then(user => {
+						if(user.result.length > 0)
+							return user.result;
+						else
+							return ctx.call("@ikigai.#edge/process", { user })
+					})
+			}
+		},
+
 		"#tasks/update-recall-date": {
 			params: {
 				fb_id: "string",

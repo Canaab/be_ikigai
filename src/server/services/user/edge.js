@@ -17,6 +17,17 @@ module.exports = {
 			}
 		},
 
+		"#edge/get-result": {
+			params: {
+				fb_id: "string"
+			},
+
+			handler(ctx) {
+				return ctx.call("@user.#tasks/find-jobs", ctx.params)
+					.then(jobs => ({ jobs }))
+			}
+		},
+
 		"#edge/create": {
 			params: {
 				fb_id: "string"
