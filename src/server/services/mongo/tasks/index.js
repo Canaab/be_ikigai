@@ -1,12 +1,13 @@
 const { MongoClient } = require('mongodb');
 
 // URL de connexion locale
-const url = "mongodb://localhost:27017"
+const url = process.env.NODE_ENV === 'production' ? "mongodb://mongo:27017" : "mongodb://localhost:27017"
 
 module.exports = {
 	mixins: [
 		require('./init'),
 		require('./user'),
+		require('./jobs')
 	],
 
 	actions: {

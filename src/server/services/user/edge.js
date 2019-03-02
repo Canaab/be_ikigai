@@ -4,10 +4,28 @@ require("moment-round");
 module.exports = {
 	actions: {
 		"#edge/login": {
-			params: {},
+			params: {
+				fb_id: "string"
+			},
 
 			handler(ctx) {
-				return ctx.call("@user.#tasks/sign-token");
+				return ctx.call("@user.#tasks/check-user-completed", ctx.params)
+					.then(completed => ({
+						completed,
+						message: completed ? "Ikigai done" : "Ikigai not created or unfinished"
+					}))
+			}
+		},
+
+		"#edge/get-result": {
+			params: {
+				fb_id: "string"
+			},
+
+			handler(ctx) {
+				return ctx.call("@user.#tasks/find-jobs", ctx.params)
+					.then(res => ctx.call("@mongo.#edge/get-jobs", { ids: res })
+						.then(jobs => ({ jobs })))
 			}
 		},
 
