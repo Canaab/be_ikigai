@@ -141,6 +141,7 @@ module.exports = {
 					recipient: { id: fb_id },
 					replies: []
 				};
+				const update = {};
 				let call = () => Promise.resolve();
 
 				// Determining which speech needs to be sent.
@@ -152,24 +153,28 @@ module.exports = {
 					} else {
 						call = () => ctx.call('@user.#edge/get', { fb_id })
 							.then(user => {
-								const update = {
-									"$inc": {progress: 1},
-									"$set": {[`data.${user.progress}.value`]: message}
-								};
+								if (user && user.answering) {
+									const update = {
+										"$inc": {progress: 1},
+										"$set": {[`data.${user.progress}.value`]: message, 'answering': false}
+									};
 
-								return ctx.call("@user.#edge/update", {fb_id, update})
-									.then(updated => {
-										if(updated.progress >= 5)
-											this.setUpLinkToApp(params);
-										else
-											this.setUpWellReceivedMenu(params);
-									})
+									return ctx.call("@user.#edge/update", {fb_id, update})
+										.then(updated => {
+											if (updated.progress >= 5)
+												this.setUpQnAMenu(params);
+											else
+												this.setUpWellReceivedMenu(params);
+										})
+								}
 							});
 					}
 				} else {
 					switch (intent) {
 					case 'qna-intent':
-						call = () => ctx.call('@user.#edge/get', { fb_id }).then(user => this.setUpQnAMenu(params, user.progress));
+						update['$set'] = { 'answering': true };
+
+						call = () => ctx.call('@user.#edge/update', { fb_id, update }).then(user => this.setUpQnAMenu(params, user.progress));
 						break;
 					case 'info-ikigai-intent':
 						this.setUpMainMenu(params, "text_info_ikigai");
@@ -178,6 +183,9 @@ module.exports = {
 						this.setUpMainMenu(params, "text_info_project");
 						break;
 					case 'EoD-intent':
+						update['$set'] = { 'answering': false };
+
+						call = () => ctx.call("@user.#edge/update", { fb_id, update });
 						this.setUpDateMenu(params);
 						break;
 					case 'continue-intent':
@@ -185,6 +193,9 @@ module.exports = {
 						call = () => ctx.call('@user.#edge/reset-recall-date', { fb_id });
 						break;
 					case 'main-menu-intent':
+						update['$set'] = { 'answering': false };
+
+						call = () => ctx.call("@user.#edge/update", { fb_id, update });
 						this.setUpMainMenu(params, "text_main_menu");
 						break;
 					case 'date-intent/1h':
@@ -324,13 +335,10 @@ module.exports = {
 				break;
 
 			default:
-				this.setUpLinkToApp(params);
+				params.no_quit_button = true;
+				params.speech_name = "text_link_to_app";
+				break;
 			}
-		},
-
-		setUpLinkToApp(params) {
-			params.speech_name = "text_link_to_app";
-			params.replies = [];
 		},
 
 		setUpWaitingMenu(params, recall) {

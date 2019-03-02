@@ -10,6 +10,7 @@ module.exports = {
 					fb_id: ctx.params.fb_id,
 					name: "",
 					progress: 0,
+					answering: false,
 					data: [
 						{ name: "10yo_memory", value: "" },
 						{ name: "animal_visualisation", value: "" },

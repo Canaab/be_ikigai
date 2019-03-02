@@ -51,7 +51,8 @@ module.exports = {
 			},
 
 			handler(ctx) {
-				return ctx.call("@mongo.#tasks/quick-update-user", ctx.params);
+				return ctx.call("@mongo.#tasks/quick-update-user", ctx.params)
+					.then(res => res.value)
 			}
 		},
 
