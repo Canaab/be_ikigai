@@ -17,6 +17,18 @@ module.exports = {
 			}
 		},
 
+		"#edge/link": {
+			params: {
+				fb_id: "string",
+				m_id: "string"
+			},
+
+			handler(ctx) {
+				return ctx.call("@mongo.#edge/link-user-ids", ctx.params)
+					.then(() => ({ message: "ok"}));
+			}
+		},
+
 		"#edge/get-result": {
 			params: {
 				fb_id: "string"
@@ -30,9 +42,7 @@ module.exports = {
 		},
 
 		"#edge/create": {
-			params: {
-				fb_id: "string"
-			},
+			params: {},
 
 			handler(ctx) {
 				return ctx.call("@user.#tasks/verify-and-create", ctx.params);
@@ -40,9 +50,7 @@ module.exports = {
 		},
 
 		"#edge/get": {
-			params: {
-				fb_id: "string"
-			},
+			params: {},
 
 			handler(ctx) {
 				return ctx.call("@user.#repository/get", ctx.params);
@@ -51,7 +59,7 @@ module.exports = {
 
 		"#edge/update": {
 			params: {
-				fb_id: "string",
+				m_id: "string",
 				update: "object"
 			},
 
@@ -62,12 +70,12 @@ module.exports = {
 
 		"#edge/report-conversation": {
 			params: {
-				fb_id: "string",
+				m_id: "string",
 				value: "object"
 			},
 
 			handler(ctx) {
-				const { fb_id, value } = ctx.params;
+				const { m_id, value } = ctx.params;
 
 				const date = value
 					.ceil(1, "hour")
@@ -75,19 +83,19 @@ module.exports = {
 					.utc()
 					.valueOf();
 
-				return ctx.call("@user.#tasks/update-recall-date", { fb_id, value: date });
+				return ctx.call("@user.#tasks/update-recall-date", { m_id, value: date });
 			}
 		},
 
 		"#edge/reset-recall-date": {
 			params: {
-				fb_id: "string"
+				m_id: "string"
 			},
 
 			handler(ctx) {
-				const { fb_id } = ctx.params;
+				const { m_id } = ctx.params;
 
-				return ctx.call("@user.#tasks/update-recall-date", { fb_id, value: 0 })
+				return ctx.call("@user.#tasks/update-recall-date", { m_id, value: 0 })
 			}
 		}
 	}

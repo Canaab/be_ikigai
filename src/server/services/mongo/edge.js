@@ -25,9 +25,7 @@ module.exports = {
 		 */
 
 		"#edge/get-user": {
-			params: {
-				fb_id: "string"
-			},
+			params: {},
 
 			handler(ctx) {
 				return ctx.call("@mongo.#tasks/get-user", ctx.params)
@@ -46,13 +44,23 @@ module.exports = {
 
 		"#edge/quick-update-user": {
 			params: {
-				fb_id: "string",
 				update: "object"
 			},
 
 			handler(ctx) {
 				return ctx.call("@mongo.#tasks/quick-update-user", ctx.params)
 					.then(res => res.value)
+			}
+		},
+
+		"#edge/link-user-ids": {
+			params: {
+				fb_id: "string",
+				m_id: "string"
+			},
+
+			handler(ctx) {
+				return ctx.call("@mongo.#tasks/link-user-ids", ctx.params);
 			}
 		},
 

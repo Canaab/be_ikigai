@@ -1,13 +1,12 @@
 module.exports = {
 	actions: {
 		"#entity/create": {
-			params: {
-				fb_id: "string"
-			},
+			params: {},
 
 			handler(ctx) {
 				return {
-					fb_id: ctx.params.fb_id,
+					m_id: ctx.params.m_id || "",
+					fb_id: ctx.params.fb_id || "",
 					name: "",
 					progress: 0,
 					answering: false,

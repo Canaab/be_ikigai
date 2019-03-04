@@ -12,7 +12,7 @@ module.exports = {
 					const {sender, message} = entry[0].messaging[0];
 
 					const params = {
-						fb_id: sender.id,
+						m_id: sender.id,
 						message: message.text,
 						intent: message.quick_reply ? message.quick_reply.payload : '',
 						nlp: message.nlp.entities
