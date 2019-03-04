@@ -10,6 +10,17 @@ module.exports = {
 			}
 		},
 
+		"#factory/update": {
+			params: {
+				fb_id: "string",
+				update: "object"
+			},
+
+			handler(ctx) {
+				return ctx.call("@mongo.#edge/quick-update-user", ctx.params);
+			}
+		},
+
 		"#factory/update-recall-date": {
 			params: {
 				fb_id: "string",
@@ -21,11 +32,13 @@ module.exports = {
 				const opts = {
 					fb_id,
 					update: {
-						recall_date: new Date(value)
+						"$set": {
+							recall_date: new Date(value)
+						}
 					}
 				};
 
-				return ctx.call("@mongo.#edge/update-user", opts);
+				return ctx.call("@mongo.#edge/quick-update-user", opts);
 			}
 		}
 	}

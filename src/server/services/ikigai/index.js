@@ -1,7 +1,11 @@
 module.exports = {
 	name: "@ikigai",
 
-	actions: {
-
-	}
+	mixins: [
+		require('./gateway'),
+		require('./edge'),
+		require('./tasks'),
+		require('./repository'),
+		require('./factory')
+	]
 }

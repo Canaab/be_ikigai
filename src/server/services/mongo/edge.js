@@ -1,7 +1,8 @@
-const has = require("lodash/has");
-
 module.exports = {
 	actions: {
+		/*
+			DB
+		 */
 		"#edge/init-db": {
 			params: {},
 
@@ -19,15 +20,17 @@ module.exports = {
 			}
 		},
 
+		/*
+			USER
+		 */
+
 		"#edge/get-user": {
 			params: {
 				fb_id: "string"
 			},
 
 			handler(ctx) {
-				const { params } = ctx;
-
-				return ctx.call("@mongo.#tasks/get-user", params)
+				return ctx.call("@mongo.#tasks/get-user", ctx.params)
 			}
 		},
 
@@ -41,14 +44,15 @@ module.exports = {
 			}
 		},
 
-		"#edge/update-user": {
+		"#edge/quick-update-user": {
 			params: {
 				fb_id: "string",
 				update: "object"
 			},
 
 			handler(ctx) {
-				return ctx.call("@mongo.#tasks/update-user", ctx.params);
+				return ctx.call("@mongo.#tasks/quick-update-user", ctx.params)
+					.then(res => res.value)
 			}
 		},
 
@@ -57,6 +61,40 @@ module.exports = {
 
 			handler(ctx) {
 				return ctx.call("@mongo.#tasks/get-users-filtered-on-recall-date")
+			}
+		},
+
+		/*
+			JOBS
+		 */
+
+		"#edge/get-jobs": {
+			params: {
+				ids: "array"
+			},
+
+			handler(ctx) {
+				return ctx.call("@mongo.#tasks/get-jobs", ctx.params);
+			}
+		},
+
+		/*
+			CHATBOT
+		 */
+
+		"#edge/get-speech": {
+			params: {
+				name: "string"
+			},
+
+			handler(ctx) {
+				return ctx.call("@mongo.#tasks/get-speech", ctx.params)
+					.then(speech => {
+						if(!speech)
+							return ctx.params.name + " text is not implemented.";
+
+						return speech.value;
+					})
 			}
 		}
 	}

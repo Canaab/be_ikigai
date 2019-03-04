@@ -1,4 +1,5 @@
 const ApiGateway = require('moleculer-web');
+const has = require('lodash/has');
 
 module.exports = {
 	name: "@api",
@@ -7,6 +8,8 @@ module.exports = {
 
 	settings: {
 		port: process.env.PORT || 3000,
+
+		path: '/api',
 
 		cors: {
 			// Configures the Access-Control-Allow-Origin CORS header.
@@ -29,16 +32,8 @@ module.exports = {
 				path: "/status",
 				aliases: {
 					"GET /health": "@application.#gateway/get-server-health",
-					"GET /db": "@application.#gateway/get-db-health"
-				}
-			},
-
-			// Public routes
-			{
-				path: "/public",
-
-				aliases: {
-					"GET /login": "@user.#gateway/login"
+					"GET /db": "@application.#gateway/get-db-health",
+					"GET /flask": "@ikigai.#gateway/get-flask-health"
 				}
 			},
 
@@ -53,7 +48,8 @@ module.exports = {
 				path: "/private",
 
 				aliases: {
-					"POST /test": "@user.#gateway/test",
+					"POST /login": "@user.#gateway/login",
+					"POST /result": "@user.#gateway/get-result"
 				}
 			},
 
@@ -65,8 +61,19 @@ module.exports = {
 
 				path: '/webhook',
 
+				authorization: true,
+
 				aliases: {
-					"POST /": "@chatbot.#gateway/webhook"
+					"POST /": "@chatbot.#gateway/webhook",
+					"GET /": "@auth.#gateway/respond-to-challenge"
+				}
+			},
+			// fallback route /
+			{
+				path: "",
+
+				aliases: {
+					"GET /": "@application.#gateway/get"
 				}
 			}
 		]
@@ -74,10 +81,12 @@ module.exports = {
 
 	methods: {
 		authorize(ctx, route, req, res) {
-			ctx.meta.headers = {};
-			Object.keys(req.headers).forEach(key => ctx.meta.headers[key] = req.headers[key]);
-			return ctx.call('@auth.#gateway/verify-api-key')
-				.then(() => Promise.resolve(ctx));
+			if(has(req, 'query') && Object.keys(req.query).length > 0)
+				ctx.params = req.query;
+			else
+				ctx.params = req.body;
+
+			return Promise.resolve(ctx);
 		}
 	}
 };

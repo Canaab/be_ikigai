@@ -6,21 +6,26 @@ module.exports = {
 			params: {},
 
 			handler(ctx) {
-				const { data } = ctx.params.originalDetectIntentRequest.payload;
-				const { queryText, intent, outputContexts, parameters, fulfillmentMessages } = ctx.params.queryResult;
+				const { object, entry } = ctx.params;
 
-				const params = {
-					fb_id: data.sender ?data.sender.id: null,
-					message: queryText,
-					receptionDate: data.timestamp,
-					intent: intent.displayName,
-					q_params: parameters,
-					contexts: outputContexts ? outputContexts.map(context => context.name.split('/').pop()) : [],
-				};
+				if(object === 'page' && has(entry[0], 'messaging')) {
+					const {sender, message} = entry[0].messaging[0];
 
-				this.logger.info("From @chatbot.#edge/receive -", params);
+					const params = {
+						fb_id: sender.id,
+						message: message.text,
+						intent: message.quick_reply ? message.quick_reply.payload : '',
+						nlp: message.nlp.entities
+					};
 
-				return ctx.call("@chatbot.#tasks/handle", params)
+					this.logger.info("PARAMS RECEIVED :", params);
+					// We don't want this call to be returned, because it ends with a HTTP request.
+					ctx.call("@chatbot.#tasks/handle", params);
+				} else {
+					this.logger.info("Unable to handle event. Ignored.");
+				}
+				// Returning a simple string as a 200OK answer.
+				return "EVENT_RECEIVED";
 			}
 		}
 	}

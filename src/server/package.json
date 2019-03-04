@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Test string IKIGAI server.\""
+    "jobs": "node onisep_jobs.js"
   },
   "repository": {
     "type": "git",
@@ -25,17 +25,16 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bluebird": "^3.5.3",
+    "cheerio": "^1.0.0-rc.2",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.11",
     "moleculer": "^0.13.4",
     "moleculer-cron": "0.0.2",
-    "moleculer-repl": "^0.5.2",
+    "moleculer-repl": "^0.5.5",
     "moleculer-web": "^0.8.3",
     "moment": "^2.22.2",
+    "moment-round": "^1.0.1",
     "mongodb": "^3.1.9",
     "uuid": "^3.3.2"
-  },
-  "devDependencies": {
-    "moment-round": "^1.0.1"
   }
 }

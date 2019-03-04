@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const private_key = "4e6a353121d4896af4e1a8e925836400e7a09fd9bd9748bfe70536e16bec3b5e";
-const uuid_dialogflow = "67873a7c-57fe-424c-ad9b-6f7f3ba438fd";
+const { private_key, fb_challenge_token } = require('../../config/config.json');
 
 module.exports = {
 	actions: {
@@ -34,12 +33,20 @@ module.exports = {
 			}
 		},
 
-		"#tasks/verify-uuid-dialogflow": {
-			params: {},
+		"#tasks/verify-fb-token": {
+			params: {
+				hub: "object"
+			},
 
 			handler(ctx) {
-				if(ctx.meta.headers["x-api-dialogflow"] !== uuid_dialogflow)
-					throw new Error("Invalid DialogFlow uuid.");
+				const { mode, token, challenge } = ctx.params;
+
+				if(mode && token) {
+					if(mode === 'subscribe' && token === fb_challenge_token) {
+						this.logger.info("Challenged by Facebook | Challenge :", challenge);
+						return challenge;
+					} else throw new Error("Wrong token provided.");
+				}
 			}
 		}
 	}

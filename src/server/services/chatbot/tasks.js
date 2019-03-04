@@ -1,9 +1,10 @@
-const has = require('lodash/has');
 const moment = require('moment');
 const { request } = require("axios");
+const Promise = require('bluebird');
 require('moment-round');
 
-const access_token = "EAADSMy0PGFIBAA8U9ZCj4EKq2VhLPLZA7PYn2rXRlxxGM9cdrZBWqmZBfmYXrhd0onDTShimy85E7ZBKQvOgF1gRW2luRO7eOMXj4f5RZAC2ltJnRzIbOZA0gUUBT3qhiuYhdxRZBHYMW79xq3a5Telw7MDZBhz5wklCJVvn34cE3VwZDZD"
+const { page_access_token } = require('../../config/config.json');
+const starter = [/^bonjour$/, /^salut$/, /^hello$/, /^démarrer$/, /^demarrer$/];
 
 module.exports = {
 	actions: {
@@ -18,6 +19,69 @@ module.exports = {
 			}
 		},
 
+		"#tasks/send": {
+			params: {
+				recipient: "object",
+				replies: "array"
+			},
+
+			handler(ctx) {
+				const { recipient, text, attachment, replies } = ctx.params;
+				const request_params = {
+					method: "POST",
+					url: `https://graph.facebook.com/v2.6/me/messages?access_token=${page_access_token}`
+				}
+
+				const responses = [Object.assign({ data: { recipient, message: { text } }}, request_params)];
+
+				if(!ctx.params.no_quit_button)
+					replies.push({ title: '➡️Quitter', intent: 'EoD-intent'} );
+
+				// 'quick_replies' rather not defined than empty
+				if(replies.length > 0)
+					responses[0].data.message.quick_replies = replies.map(qr => ({
+						title: qr.title,
+						content_type: "text",
+						payload: qr.intent || '',
+					}));
+
+				if(attachment)
+					responses.unshift(Object.assign({ data: { recipient, message: { attachment } }}, request_params));
+
+				return Promise
+					.resolve([
+						// Mark as seen
+						{
+							...request_params,
+							data: {
+								recipient,
+								sender_action: "mark_seen"
+							}
+						},
+						// // Typing ON
+						{
+							...request_params,
+							data: {
+								recipient,
+								sender_action: "typing_on"
+							}
+						},
+						// Responses
+						...responses,
+						// Typing off
+						{
+							...request_params,
+							data: {
+								recipient,
+								sender_action: "typing_off"
+							}
+						},
+					])
+					.mapSeries((query) => request(query))
+					.catch(e => console.error(e));
+			}
+		},
+
 		"#tasks/send-recall": {
 			params: {
 				users: "array"
@@ -29,24 +93,24 @@ module.exports = {
 				const send_p = users.map(user => request(
 						{
 							method: "POST",
-							url: `https://graph.facebook.com/v2.6/me/messages?access_token=${access_token}`,
+							url: `https://graph.facebook.com/v2.6/me/messages?access_token=${page_access_token}`,
 							data: {
 								messaging_type: "UPDATE",
 								recipient: {
 									"id": user.fb_id
 								},
 								message: {
-									text: "Alors, on reprend ? :)",
+									text: "Alors, on reprend ? 😉",
 									quick_replies: [
 										{
 											content_type:"text",
-											title:"C'est parti !",
-											payload: ""
+											title:"🤘C'est parti !",
+											payload: "continue-intent"
 										},
 										{
 											content_type:"text",
-											title:"Plus tard",
-											payload: ""
+											title:"🕐Plus tard",
+											payload: "EoD-intent"
 										}
 									]
 								}
@@ -66,44 +130,230 @@ module.exports = {
 			params: {
 				fb_id: 'string',
 				message: 'string',
-				receptionDate: 'number',
 				intent: 'string',
-				contexts: 'array',
-				q_params: 'object'
+				nlp: 'object'
 			},
 
 			handler(ctx) {
-				const { fb_id, message, receptionDate, intent, contexts, q_params } = ctx.params;
+				const { fb_id, message, intent, nlp } = ctx.params;
+				const params = {
+					speech_name: '',
+					recipient: { id: fb_id },
+					replies: []
+				};
+				const update = {};
+				let call = () => Promise.resolve();
 
-				switch (intent) {
-				case 'StartIntent':
-					return ctx.call('@user.#edge/create-user', { fb_id })
+				// Determining which speech needs to be sent.
+				if(!intent.length) {
+					// Start of discussion
+					if(starter.some(s => message.toLowerCase().match(s))) {
+						this.setUpMainMenu(params, "text_hello");
+						call = () => ctx.call('@user.#edge/create', { fb_id });
+					} else {
+						call = () => ctx.call('@user.#edge/get', { fb_id })
+							.then(user => {
+								if (user && user.answering) {
+									const update = {
+										"$inc": {progress: 1},
+										"$set": {[`data.${user.progress}.value`]: message, 'answering': false}
+									};
 
-				case 'EoDIntent - later':
-					if(has(q_params, 'date-time')) {
-						const date = q_params['date-time'];
-
-						return ctx.call("@user.#edge/report-conversation", { fb_id, value: date })
-							.then(() => {
-
-								return {
-									fulfillmentMessages: [
-										{
-											quickReplies : {
-												title: `Très bien ! Je te recontacte ${message.toLowerCase()} !`,
-												quickReplies: [
-													'Reprendre maintenant'
-												]
-											}
-										}
-									]
+									return ctx.call("@user.#edge/update", {fb_id, update})
+										.then(updated => {
+											if (updated.progress >= 5)
+												this.setUpQnAMenu(params);
+											else
+												this.setUpWellReceivedMenu(params);
+										})
 								}
-							})
+							});
 					}
+				} else {
+					switch (intent) {
+					case 'qna-intent':
+						update['$set'] = { 'answering': true };
 
-				default:
-					return {};
+						call = () => ctx.call('@user.#edge/update', { fb_id, update }).then(user => this.setUpQnAMenu(params, user.progress));
+						break;
+					case 'info-ikigai-intent':
+						this.setUpMainMenu(params, "text_info_ikigai");
+						break;
+					case 'info-project-intent':
+						this.setUpMainMenu(params, "text_info_project");
+						break;
+					case 'EoD-intent':
+						update['$set'] = { 'answering': false };
+
+						call = () => ctx.call("@user.#edge/update", { fb_id, update });
+						this.setUpDateMenu(params);
+						break;
+					case 'continue-intent':
+						this.setUpMainMenu(params, "text_main_menu");
+						call = () => ctx.call('@user.#edge/reset-recall-date', { fb_id });
+						break;
+					case 'main-menu-intent':
+						update['$set'] = { 'answering': false };
+
+						call = () => ctx.call("@user.#edge/update", { fb_id, update });
+						this.setUpMainMenu(params, "text_main_menu");
+						break;
+					case 'date-intent/1h':
+					case 'date-intent/tomorroy':
+					case 'date-intent/never':
+						switch (intent.split('/')[1]) {
+						case '1h':
+							this.setUpWaitingMenu(params, true);
+							call = () => ctx.call('@user.#edge/report-conversation', { fb_id, value: moment().add(1, 'hour') })
+							break;
+						case 'tomorroy':
+							this.setUpWaitingMenu(params, true);
+							call = () => ctx.call('@user.#edge/report-conversation', { fb_id, value: moment().add(1, 'day') })
+							break;
+						case 'never':
+							this.setUpWaitingMenu(params, false)
+							break;
+						}
+						break;
+					}
 				}
+
+				return call()
+					.then(() => {
+						if (params.speech_name.length === 0)
+							this.setUpMainMenu(params, "text_misunderstood");
+
+							return ctx.call("@mongo.#edge/get-speech", {name: params.speech_name})
+								.then(text => {
+									params.text = text;
+									delete params.speech_name;
+
+									this.logger.info("DATA TO SEND :", params);
+									return ctx.call("@chatbot.#tasks/send", params);
+								})
+					})
+			}
+		}
+	},
+
+	methods: {
+		setUpMainMenu(params, speech_name) {
+			if(speech_name === "text_info_ikigai") {
+				params.attachment = {
+					"type": "template",
+					"payload": {
+						"template_type": "media",
+						"elements": [
+							{
+								"media_type": "video",
+								"url": "https://business.facebook.com/welcometojapan.co.jp/videos/375195009717092/"
+							}
+						]
+					}
+				}
+			}
+			params.speech_name = speech_name;
+			params.replies = [
+				{
+					title: '🤘Commençons !',
+					intent: 'qna-intent'
+				},
+				{
+					title: "🇯🇵IKIGAI ?",
+					intent: 'info-ikigai-intent'
+				},
+				{
+					title: "🤖Qui es-tu ?",
+					intent: 'info-project-intent'
+				},
+			]
+		},
+
+		setUpDateMenu(params) {
+			params.speech_name = "text_eod";
+			params.no_quit_button = true;
+			params.replies = [
+				{
+					title: "🕐Dans 1h",
+					intent: 'date-intent/1h'
+				},
+				{
+					title: '🌙Demain',
+					intent: 'date-intent/tomorroy'
+				},
+				{
+					title: '😢Jamais',
+					intent: 'date-intent/never'
+				},
+				{
+					title: '❌Annuler',
+					intent: 'main-menu-intent'
+				}
+			]
+		},
+
+		setUpWellReceivedMenu(params) {
+			params.speech_name = "text_well_received";
+			params.replies = [
+				{
+					title: '👉Continuer',
+					intent: 'qna-intent'
+				},
+				{
+					title: '🌀Menu Principal',
+					intent: 'main-menu-intent'
+				}
+			]
+		},
+
+		setUpQnAMenu(params, step) {
+			params.replies = [
+				{
+					title: '🌀Menu Principal',
+					intent: 'main-menu-intent'
+				}
+			];
+
+			switch(step) {
+			case 0: // le kiff à 10 ans
+				params.speech_name = "text_10yo_enjoy";
+				break;
+			case 1: // Si j'étais un animal
+				params.speech_name = "text_be_animal";
+				break;
+			case 2: // Personnages inspirants
+				params.speech_name = "text_perso_inspi";
+				break;
+			case 3: // Ce qui me met en colère
+				params.speech_name = "text_wrath";
+				break;
+			case 4: // Le Monde irait mieux si...
+				params.speech_name = "text_better_world";
+				break;
+			case 5: // Demande à un ami
+				params.speech_name = "text_friend_feedback";
+				break;
+
+			default:
+				params.no_quit_button = true;
+				params.speech_name = "text_link_to_app";
+				break;
+			}
+		},
+
+		setUpWaitingMenu(params, recall) {
+			params.no_quit_button = true;
+
+			if(recall) {
+				params.speech_name = 'text_recall';
+				params.replies = [
+					{
+						title: '👋Reprendre',
+						intent: 'continue-intent'
+					}
+				]
+			} else {
+				params.speech_name = 'text_never_recall';
 			}
 		}
 	}

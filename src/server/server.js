@@ -5,6 +5,7 @@ moment.locale('fr');
 
 const broker = new ServiceBroker({
 	// Options
+	metrics: true,
 	logger: true,
 	logFormatter: 'simple'
 });
@@ -21,8 +22,6 @@ broker.start().then(() => {
 			}
 			else {
 				broker.logger.error("Unable to reach database server.");
-				broker.stop();
 			}
 		})
-
 });
