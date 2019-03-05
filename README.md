@@ -21,6 +21,8 @@ Installez pip sur votre machine : https://pip.pypa.io/en/stable/installing/
 
 Dans un terminal :\
 `pip install Flask`
+`pip install nltk`
+`pip install spacy`
 
 ## Installation de l'environnement
 ### Pull GitHub
