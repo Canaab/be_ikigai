@@ -12,7 +12,7 @@ module.exports = {
 
 		"#factory/update": {
 			params: {
-				fb_id: "string",
+				m_id: "string",
 				update: "object"
 			},
 
@@ -23,14 +23,14 @@ module.exports = {
 
 		"#factory/update-recall-date": {
 			params: {
-				fb_id: "string",
+				m_id: "string",
 				value: "number"
 			},
 
 			handler(ctx) {
-				const { fb_id, value } = ctx.params;
+				const { m_id, value } = ctx.params;
 				const opts = {
-					fb_id,
+					m_id,
 					update: {
 						"$set": {
 							recall_date: new Date(value)

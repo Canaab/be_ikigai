@@ -97,7 +97,7 @@ module.exports = {
 							data: {
 								messaging_type: "UPDATE",
 								recipient: {
-									"id": user.fb_id
+									"id": user.m_id
 								},
 								message: {
 									text: "Alors, on reprend ? 😉",
@@ -128,17 +128,17 @@ module.exports = {
 
 		"#tasks/handle": {
 			params: {
-				fb_id: 'string',
+				m_id: 'string',
 				message: 'string',
 				intent: 'string',
 				nlp: 'object'
 			},
 
 			handler(ctx) {
-				const { fb_id, message, intent, nlp } = ctx.params;
+				const { m_id, message, intent, nlp } = ctx.params;
 				const params = {
 					speech_name: '',
-					recipient: { id: fb_id },
+					recipient: { id: m_id },
 					replies: []
 				};
 				const update = {};
@@ -149,9 +149,9 @@ module.exports = {
 					// Start of discussion
 					if(starter.some(s => message.toLowerCase().match(s))) {
 						this.setUpMainMenu(params, "text_hello");
-						call = () => ctx.call('@user.#edge/create', { fb_id });
+						call = () => ctx.call('@user.#edge/create', { m_id });
 					} else {
-						call = () => ctx.call('@user.#edge/get', { fb_id })
+						call = () => ctx.call('@user.#edge/get', { m_id })
 							.then(user => {
 								if (user && user.answering) {
 									const update = {
@@ -159,10 +159,10 @@ module.exports = {
 										"$set": {[`data.${user.progress}.value`]: message, 'answering': false}
 									};
 
-									return ctx.call("@user.#edge/update", {fb_id, update})
+									return ctx.call("@user.#edge/update", {m_id, update})
 										.then(updated => {
-											if (updated.progress >= 5)
-												this.setUpQnAMenu(params);
+											if (updated.progress > 5)
+												this.setUpLoginMenu(params, m_id);
 											else
 												this.setUpWellReceivedMenu(params);
 										})
@@ -174,7 +174,10 @@ module.exports = {
 					case 'qna-intent':
 						update['$set'] = { 'answering': true };
 
-						call = () => ctx.call('@user.#edge/update', { fb_id, update }).then(user => this.setUpQnAMenu(params, user.progress));
+						call = () => ctx.call('@user.#edge/update', { m_id, update }).then(user => {
+							const arg = user.progress > 5 ? m_id : user.progress;
+							this.setUpQnAMenu(params, arg);
+						});
 						break;
 					case 'info-ikigai-intent':
 						this.setUpMainMenu(params, "text_info_ikigai");
@@ -185,17 +188,17 @@ module.exports = {
 					case 'EoD-intent':
 						update['$set'] = { 'answering': false };
 
-						call = () => ctx.call("@user.#edge/update", { fb_id, update });
+						call = () => ctx.call("@user.#edge/update", { m_id, update });
 						this.setUpDateMenu(params);
 						break;
 					case 'continue-intent':
 						this.setUpMainMenu(params, "text_main_menu");
-						call = () => ctx.call('@user.#edge/reset-recall-date', { fb_id });
+						call = () => ctx.call('@user.#edge/reset-recall-date', { m_id });
 						break;
 					case 'main-menu-intent':
 						update['$set'] = { 'answering': false };
 
-						call = () => ctx.call("@user.#edge/update", { fb_id, update });
+						call = () => ctx.call("@user.#edge/update", { m_id, update });
 						this.setUpMainMenu(params, "text_main_menu");
 						break;
 					case 'date-intent/1h':
@@ -204,11 +207,11 @@ module.exports = {
 						switch (intent.split('/')[1]) {
 						case '1h':
 							this.setUpWaitingMenu(params, true);
-							call = () => ctx.call('@user.#edge/report-conversation', { fb_id, value: moment().add(1, 'hour') })
+							call = () => ctx.call('@user.#edge/report-conversation', { m_id, value: moment().add(1, 'hour') })
 							break;
 						case 'tomorroy':
 							this.setUpWaitingMenu(params, true);
-							call = () => ctx.call('@user.#edge/report-conversation', { fb_id, value: moment().add(1, 'day') })
+							call = () => ctx.call('@user.#edge/report-conversation', { m_id, value: moment().add(1, 'day') })
 							break;
 						case 'never':
 							this.setUpWaitingMenu(params, false)
@@ -306,7 +309,7 @@ module.exports = {
 			]
 		},
 
-		setUpQnAMenu(params, step) {
+		setUpQnAMenu(params, arg) {
 			params.replies = [
 				{
 					title: '🌀Menu Principal',
@@ -314,7 +317,7 @@ module.exports = {
 				}
 			];
 
-			switch(step) {
+			switch(arg) {
 			case 0: // le kiff à 10 ans
 				params.speech_name = "text_10yo_enjoy";
 				break;
@@ -333,11 +336,27 @@ module.exports = {
 			case 5: // Demande à un ami
 				params.speech_name = "text_friend_feedback";
 				break;
-
 			default:
-				params.no_quit_button = true;
-				params.speech_name = "text_link_to_app";
+				this.setUpLoginMenu(params, arg);
 				break;
+			}
+		},
+
+		setUpLoginMenu(params, m_id) {
+			params.no_quit_button = true;
+			params.speech_name = "text_link_to_app";
+			params.attachment = {
+				"type":"template",
+				"payload": {
+					"template_type":"button",
+					"text":"Try the log in button!",
+					"buttons": [
+						{
+							"type": "account_link",
+							"url": `https://6f822b37.ngrok.io/api/?m_id=${m_id}`
+						}
+					]
+				}
 			}
 		},
 

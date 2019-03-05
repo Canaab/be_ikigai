@@ -49,6 +49,7 @@ module.exports = {
 
 				aliases: {
 					"POST /login": "@user.#gateway/login",
+					"POST /link": "@user.#gateway/link",
 					"POST /result": "@user.#gateway/get-result"
 				}
 			},
