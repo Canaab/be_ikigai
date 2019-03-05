@@ -3,6 +3,9 @@ import { AuthService } from "angularx-social-login";
 import { FacebookLoginProvider } from "angularx-social-login";
 import { SocialUser } from "angularx-social-login";
 
+import { HttpClient } from '@angular/common/http';
+
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -15,12 +18,13 @@ export class HomeComponent implements OnInit {
 
   section: String;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private httpClient: HttpClient) {}
 
   ngOnInit() {
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
+      this.sendID();
     });   
   }
 
@@ -31,6 +35,45 @@ export class HomeComponent implements OnInit {
   signOut(): void {
     this.authService.signOut();
   }
+
+  sendID() {
+    this.httpClient.post(" https://51e78cbe.ngrok.io/api/private/login",
+    {
+        "fb_id": "10213903947695256"
+    })
+    .subscribe(
+      (val) => {
+          console.log("POST call successful value returned in body", 
+                      val);
+      },
+      response => {
+          console.log("POST call in error", response);
+      },
+      () => {
+          console.log("The POST observable is now completed.");
+      });
+    console.log("envoi fb_id")
+  }
+
+  getResult() {
+    this.httpClient.post("https://51e78cbe.ngrok.io/api/private/result",
+    {
+        "fb_id": "10213903947695256"
+    })
+    .subscribe(
+      (val) => {
+          console.log("POST call successful value returned in body", 
+                      val);
+      },
+      response => {
+          console.log("POST call in error", response);
+      },
+      () => {
+          console.log("The POST observable is now completed.");
+      });
+    console.log("envoi fb_id for result")
+  }
+  
 
   clickSection(id: number): void {
 
@@ -49,6 +92,8 @@ export class HomeComponent implements OnInit {
       }
       case 4:{
         this.section = "Ikigai";
+        this.getResult();
+        console.log("ikigai")
         break;
       }
       case 5:{

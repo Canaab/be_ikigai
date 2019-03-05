@@ -353,7 +353,7 @@ module.exports = {
 					"buttons": [
 						{
 							"type": "account_link",
-							"url": `https://6f822b37.ngrok.io/api/?m_id=${m_id}`
+							"url": `https://localhost:4200/login/?m_id=${m_id}`
 						}
 					]
 				}

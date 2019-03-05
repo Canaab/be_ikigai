@@ -11,6 +11,8 @@ import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider} from
 import { MaphilightModule } from 'ng-maphilight';
 import { DiagrammeComponent } from './diagramme/diagramme.component'
 
+import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './login/login.component'
 
 
 let config = new AuthServiceConfig([
@@ -19,6 +21,7 @@ let config = new AuthServiceConfig([
     provider: new FacebookLoginProvider("231117241129042")
   }
 ]);
+
 
 export function provideConfig() {
   return config;
@@ -30,12 +33,14 @@ export function provideConfig() {
     AppComponent,
     HomeComponent,
     DiagrammeComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     SocialLoginModule,
-    MaphilightModule
+    MaphilightModule,
+    HttpClientModule
   ],
   providers: [
     {

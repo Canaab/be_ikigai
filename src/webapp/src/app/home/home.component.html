@@ -11,6 +11,7 @@
             </ul>
             <ul class="navbar-nav" style="margin-right:3%">
                 <li class="nav-item active">
+                    {{ user.facebook.clientId }}
                     <img  class="rounded-circle" src="{{ user.photoUrl }}" style="width: 40px; height: auto">
                 </li>
                 <li class="nav-item active">
@@ -23,7 +24,7 @@
 </div>
 
 <div *ngIf="!user">
-  <h1>ISENkigAI</h1>
+  <h1 style="text-align:center">ISENkigAI</h1>
 </div>
 
 <div class="jumbotron bg-transparent text-center" >
@@ -38,7 +39,7 @@
     <div class="card-block">
       <!-- <h4 class="card-title">Non connecté</h4> -->
       <p>
-        Dites-nous en plus sur vous grâce au <a href="http://m.me/275645443087130" target="_blank"><b>Chatbot Facebook</b></a> afin de créer votre Ikigai
+        Dites-nous en plus sur vous grâce au <a href="http://m.me/2222007154724380" target="_blank"><b>Chatbot Facebook</b></a> afin de créer votre Ikigai
       </p>
       <p>Connectez-vous ensuite pour le consulter</p>
       
