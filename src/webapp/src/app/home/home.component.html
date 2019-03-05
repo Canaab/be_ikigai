@@ -1,0 +1,120 @@
+
+<div *ngIf="user" class="text-center">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">ISENkigAI</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarNavDropdown" class="navbar-collapse collapse">
+            <ul class="navbar-nav mr-auto">
+                
+            </ul>
+            <ul class="navbar-nav" style="margin-right:3%">
+                <li class="nav-item active">
+                    {{ user.facebook.clientId }}
+                    <img  class="rounded-circle" src="{{ user.photoUrl }}" style="width: 40px; height: auto">
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link">{{ user.name }}</a>
+                </li>
+                <button class="btn btn-danger" (click)="signOut()">Se deconnecter <span class="fa fa-sign-out"></span></button>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div *ngIf="!user">
+  <h1 style="text-align:center">ISENkigAI</h1>
+</div>
+
+<div class="jumbotron bg-transparent text-center" >
+  <div *ngIf="!user" class=" text-center container col-8">
+      <blockquote>
+          <p>Ikigai (生き甲斐) est l'équivalent japonais de la « joie de vivre » et de la « raison d'être ».
+              Bien que les significations soient identiques, les attitudes culturelles envers le concept sont différentes.
+          </p>
+          <cite>– Wikipédia</cite>
+      </blockquote>
+     <hr class="col-4 ">
+    <div class="card-block">
+      <!-- <h4 class="card-title">Non connecté</h4> -->
+      <p>
+        Dites-nous en plus sur vous grâce au <a href="http://m.me/2222007154724380" target="_blank"><b>Chatbot Facebook</b></a> afin de créer votre Ikigai
+      </p>
+      <p>Connectez-vous ensuite pour le consulter</p>
+      
+      <hr class="col-4 ">
+    </div>
+
+    <div class="card-block">
+        <p>Se connecter avec Facebook:</p>
+      <button class="btn btn-social-icon btn-facebook btn-lg btn-block container col-3" (click)="signInWithFB()"><span class="fa fa-facebook"></span></button>
+    </div>
+
+    
+
+  </div>
+
+
+
+
+  <div *ngIf="user" class="text-center ">
+    <!-- Img Ikigai with maping polygons-->
+    <div class="center-block">
+      <img class="card-img-top img-responsive" name="usaMap2" onmouseover="imageMapResize();" src="assets/img/ikigai-diagramme.png" usemap="#Map2" style="max-width:600px; height: auto;margin-bottom:-10%;;margin-top:-2%">
+    </div>
+    <map name="Map2">
+        <area shape="poly" (click)="clickSection(1);" data-toggle="modal" data-target="#exampleModal" coords="244,0,170,20,130,59,110,98,160,97,206,110,243,138,285,109,334,96,377,99,352,53,310,18" >
+        <area shape="poly" (click)="clickSection(2);" data-toggle="modal" data-target="#exampleModal" coords="109,102,102,151,114,206,140,239,176,211,210,200,224,165,244,140,206,111,168,98">
+        <area shape="poly" (click)="clickSection(3);" data-toggle="modal" data-target="#exampleModal" coords="246,138,280,113,325,97,378,101,385,130,382,174,364,220,348,239,312,211,280,199,259,156">
+        <area shape="poly" (click)="clickSection(4);" data-toggle="modal" data-target="#exampleModal" coords="211,199,240,195,279,199,285,239,279,280,246,285,211,281,204,241">
+        <area shape="poly" (click)="clickSection(5);" data-toggle="modal" data-target="#exampleModal" coords="107,102,61,124,25,160,4,210,3,259,22,313,64,357,106,375,102,320,116,273,139,241,110,192,102,151">
+        <area shape="poly" (click)="clickSection(6);" data-toggle="modal" data-target="#exampleModal" coords="380,102,386,136,383,173,370,209,350,238,379,291,386,329,384,363,381,376,429,354,464,318,484,274,487,222,469,170,431,124">
+        <area shape="poly" coords="" onClick="alert('Profession');" >
+        <area shape="poly" coords="" onClick="alert('Vocation');" >
+        <area shape="poly" coords="" onClick="alert('Paid');">
+    </map>
+    
+   <!-- Modal popup -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">{{ section }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Modal Ikigai with jobs-->
+        <div  *ngIf="section == 'Ikigai'">
+          <div class="row">
+            <div class="col-6">
+                <div class="item"><h4>Title 1</h4><img src="http://placehold.it/220x150" class="img-thumbnail"></div>
+              
+            </div>
+            <div class="col-6">
+                <div class="item"><h4>Title 2</h4><img src="http://placehold.it/220x150" class="img-thumbnail"></div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-6">
+                  <div class="item"><h4>Title 3</h4><img src="http://placehold.it/220x150" class="img-thumbnail"></div>
+                
+              </div>
+              <div class="col-6">
+                <div class="item"><h4>Title 4</h4><img src="http://placehold.it/220x150" class="img-thumbnail"></div>
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
