@@ -9,6 +9,10 @@
     "value": "Je n'ai pas bien compris 🧐\n\nMenu principal :"
   },
   {
+    "name": "text_account_linking",
+    "value": "On a fini ! Connecte-toi à l'application ISENkigAI pour connaître ton résultat !"
+  },
+  {
     "name": "text_eod",
     "value": "D'accord on s'arrête ici, veux-tu reprogrammer notre échange ? 😇\nJ'ai besoin de plus pour te connaître ! 🤓"
   },
@@ -50,7 +54,11 @@
   },
   {
     "name": "text_link_to_app",
-    "value": "Lien vers l'application pour connaître ton résultat : 😱 (WIP)"
+    "value": "Je te donne rendez-vous ici : https://localhost:4200/"
+  },
+  {
+    "name": "text_no_link",
+    "value": "Connexion refusée, je ne peux pas te donner de résultat sans ça..."
   },
   {
     "name": "text_recall",
