@@ -1,5 +1,7 @@
 const ApiGateway = require('moleculer-web');
 const has = require('lodash/has');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
 	name: "@api",
@@ -8,6 +10,12 @@ module.exports = {
 
 	settings: {
 		port: process.env.PORT || 3000,
+
+		// HTTPS server with certificate
+		// https: {
+		// 	key: fs.readFileSync(path.join(__dirname, "..", "ssl/key.pem")),
+		// 	cert: fs.readFileSync(path.join(__dirname, "..", "ssl/cert.pem"))
+		// },
 
 		path: '/api',
 
