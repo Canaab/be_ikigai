@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class HomeComponent implements OnInit {
 
+  private add = "https://f44cc496.ngrok.io";
   user: SocialUser;
   private loggedIn: boolean;
 
@@ -37,7 +38,7 @@ export class HomeComponent implements OnInit {
   }
 
   sendID() {
-    this.httpClient.post(" https://51e78cbe.ngrok.io/api/private/login",
+    this.httpClient.post(this.add+"/api/private/login",
     {
         "fb_id": "10213903947695256"
     })
@@ -56,14 +57,14 @@ export class HomeComponent implements OnInit {
   }
 
   getResult() {
-    this.httpClient.post("https://51e78cbe.ngrok.io/api/private/result",
+    this.httpClient.post(this.add+"/api/private/result",
     {
         "fb_id": "10213903947695256"
     })
     .subscribe(
       (val) => {
-          console.log("POST call successful value returned in body", 
-                      val);
+          console.log("POST call successful value returned in body", val);
+          console.log(val);
       },
       response => {
           console.log("POST call in error", response);
@@ -114,3 +115,11 @@ export class HomeComponent implements OnInit {
   }
 
 }
+
+export interface Item {
+  name: string
+  description: string
+  onisep: string
+  accuracy: string
+}
+
