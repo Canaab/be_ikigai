@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
         console.log(this.m_id)
         console.log(this.redirect_uri)
 
-        this.httpClient.post(" https://51e78cbe.ngrok.io/api/private/link",
+        this.httpClient.post(" http://localhost:3000/api/private/link",
         {
             "fb_id": this.user.id,
             "m_id": this.m_id
@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
           (val) => {
               console.log("POST call successful value returned in body", 
                           val);
+              window.location.href = this.redirect_uri + "&authorization_code=OK";
           },
           response => {
               console.log("POST call in error", response);
@@ -47,8 +48,6 @@ export class LoginComponent implements OnInit {
           () => {
               console.log("The POST observable is now completed.");
           });
-          
-          window.location.href = this.redirect_uri + "&authorization_code=OK";
           }
         }); 
   }

@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify
 
-from processing import processing
+from sources import processing, initGlobal
 
+initGlobal()
+
+print("Launching app...")
 app = Flask(__name__)
 
 @app.route('/health', methods=['GET'])
@@ -10,10 +13,6 @@ def health():
 
 @app.route('/process', methods=['POST'])
 def process():
-	data = request.get_json()
-	print(data['user_data'])
-	processed = processing(data['user_data'])
+	data = request.get_json()['user_data']
 
-	res = { 'processed': processed }
-
-	return jsonify(res)
+	return jsonify({ 'processed': processing(data) })

@@ -126,6 +126,33 @@ module.exports = {
 			}
 		},
 
+		"#tasks/handle_account_linking": {
+			params: {
+				m_id: "string",
+				status: "string"
+			},
+
+			handler(ctx) {
+				const params = {
+					text: '',
+					no_quit_button: true,
+					recipient: { id: ctx.params.m_id },
+					replies: [{
+						title: '🌀Menu Principal',
+						intent: 'main-menu-intent'
+					}]
+				};
+				const name = ctx.params.status === "linked" ? 'text_link_to_app' : 'text_no_link';
+
+				return ctx.call("@mongo.#edge/get-speech", { name })
+					.then(text => {
+						params.text = text;
+
+						return ctx.call("@chatbot.#tasks/send", params);
+					})
+			}
+		},
+
 		"#tasks/handle": {
 			params: {
 				m_id: 'string',
@@ -223,17 +250,24 @@ module.exports = {
 
 				return call()
 					.then(() => {
-						if (params.speech_name.length === 0)
+						if (params.speech_name.length === 0 && !params.attachment)
 							this.setUpMainMenu(params, "text_misunderstood");
+						else if(params.attachment)
+							params.speech_name = "text_account_linking";
 
-							return ctx.call("@mongo.#edge/get-speech", {name: params.speech_name})
-								.then(text => {
+						return ctx.call("@mongo.#edge/get-speech", {name: params.speech_name})
+							.then(text => {
+								if(params.speech_name === "text_account_linking") {
+									params.attachment.payload.text = text;
+								} else {
 									params.text = text;
-									delete params.speech_name;
+								}
 
-									this.logger.info("DATA TO SEND :", params);
-									return ctx.call("@chatbot.#tasks/send", params);
-								})
+								delete params.speech_name;
+
+								this.logger.info("DATA TO SEND :", params);
+								return ctx.call("@chatbot.#tasks/send", params);
+							})
 					})
 			}
 		}
@@ -344,12 +378,11 @@ module.exports = {
 
 		setUpLoginMenu(params, m_id) {
 			params.no_quit_button = true;
-			params.speech_name = "text_link_to_app";
 			params.attachment = {
 				"type":"template",
 				"payload": {
 					"template_type":"button",
-					"text":"Try the log in button!",
+					"text": "text_link_to_app",
 					"buttons": [
 						{
 							"type": "account_link",

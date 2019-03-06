@@ -67,3 +67,5 @@ db/
 ignore/
 
 src/python/__pycache__/
+
+src/server/ssl/
