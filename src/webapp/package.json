@@ -28,6 +28,7 @@
     "core-js": "^2.5.4",
     "font-awesome": "^4.7.0",
     "image-map-resizer": "^1.0.7",
+    "json2typescript": "^1.2.0",
     "ng-maphilight": "^0.2.2",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.3.3",

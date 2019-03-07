@@ -67,3 +67,31 @@
 			blockquote p::after {
 				content: '\201D';
 			}
+
+			.pict{
+				
+				height: 150px;
+
+			}
+
+			.center {
+				display: block;
+				margin-left: auto;
+				margin-right: auto;
+				max-width: 40%;
+			  }
+
+
+			  .sharebuttons a { color: #fff !important; }
+			  .btn-facebook2 { background: #3b5998;}
+			  .btn-twitter { background: #00acee;}
+			  .btn-instagram { background: #e95950;}
+			  .btn-pinterest { background: #c8232c;}
+			  .btn-linkedin { background: #0e76a8;}
+			  .btn-facebook2:hover { background: #2f4679;}
+			  .btn-twitter:hover { background: #0089bd;}
+			  .btn-instagram:hover { background: #b03b2d;}
+			  .btn-pinterest:hover { background: #9f1b23;}
+			  .btn-linkedin:hover { background: #0b5e85;}
+
+			  

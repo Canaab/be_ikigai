@@ -24,17 +24,18 @@
 </div>
 
 <div *ngIf="!user">
-  <h1 style="text-align:center">ISENkigAI</h1>
+  <img src="assets/img/logo.png" class="center">
+  <h1 style="text-align:center;color:black;margin-top: -2%;margin-bottom: -2%">ISENkigAI</h1>
 </div>
 
 <div class="jumbotron bg-transparent text-center" >
-  <div *ngIf="!user" class=" text-center container col-8">
-      <blockquote>
-          <p>Ikigai (生き甲斐) est l'équivalent japonais de la « joie de vivre » et de la « raison d'être ».
-              Bien que les significations soient identiques, les attitudes culturelles envers le concept sont différentes.
+  <div *ngIf="!user" class=" text-center container col-12">
+      
+          <p>"Ikigai (生き甲斐) est l'équivalent japonais de la « joie de vivre » et de la « raison d'être ».<br>
+              Bien que les significations soient identiques, les attitudes culturelles envers le concept sont différentes."
           </p>
           <cite>– Wikipédia</cite>
-      </blockquote>
+      
      <hr class="col-4 ">
     <div class="card-block">
       <!-- <h4 class="card-title">Non connecté</h4> -->
@@ -48,7 +49,7 @@
 
     <div class="card-block">
         <p>Se connecter avec Facebook:</p>
-      <button class="btn btn-social-icon btn-facebook btn-lg btn-block container col-3" (click)="signInWithFB()"><span class="fa fa-facebook"></span></button>
+        <button class="btn btn-social-icon btn-facebook btn-lg btn-block container col-3" (click)="signInWithFB()"><span class="fa fa-facebook"></span></button>
     </div>
 
     
@@ -61,13 +62,21 @@
   <div *ngIf="user" class="text-center ">
     <!-- Img Ikigai with maping polygons-->
     <div class="center-block">
-      <img class="card-img-top img-responsive" name="usaMap2" onmouseover="imageMapResize();" src="assets/img/ikigai-diagramme.png" usemap="#Map2" style="max-width:600px; height: auto;margin-bottom:-10%;;margin-top:-2%">
+      <img class="card-img-top img-responsive" name="usaMap2" onmouseover="imageMapResize();" src="assets/img/ikigai-diagramme.png" usemap="#Map2" style="max-width:500px; height: auto;margin-bottom:-10%;;margin-top:-2%">
     </div>
+
+      <div class="sharebuttons btn-group btn-group-lg btn-group-justified" style="padding-top:12%">
+        <a href="https://twitter.com/intent/tweet" class="btn btn-twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+        <a href="https://www.facebook.com/" class="btn btn-facebook2" target="_blank"><i class="fa fa-facebook"></i></a>
+        <a href="https://www.instagram.com" class="btn btn-instagram" target="_blank"><i class="fa fa-instagram" ></i></a>
+        <a href="https://www.linkedin.com/" target="_blank" class="btn btn-linkedin"><i class="fa fa-linkedin"></i> </a>
+        </div>
+
     <map name="Map2">
         <area shape="poly" (click)="clickSection(1);" data-toggle="modal" data-target="#exampleModal" coords="244,0,170,20,130,59,110,98,160,97,206,110,243,138,285,109,334,96,377,99,352,53,310,18" >
-        <area shape="poly" (click)="clickSection(2);" data-toggle="modal" data-target="#exampleModal" coords="109,102,102,151,114,206,140,239,176,211,210,200,224,165,244,140,206,111,168,98">
-        <area shape="poly" (click)="clickSection(3);" data-toggle="modal" data-target="#exampleModal" coords="246,138,280,113,325,97,378,101,385,130,382,174,364,220,348,239,312,211,280,199,259,156">
-        <area shape="poly" (click)="clickSection(4);" data-toggle="modal" data-target="#exampleModal" coords="211,199,240,195,279,199,285,239,279,280,246,285,211,281,204,241">
+        <!-- <area shape="poly" (click)="clickSection(2);" data-toggle="modal" data-target="#exampleModal" coords="109,102,102,151,114,206,140,239,176,211,210,200,224,165,244,140,206,111,168,98">
+        <area shape="poly" (click)="clickSection(3);" data-toggle="modal" data-target="#exampleModal" coords="246,138,280,113,325,97,378,101,385,130,382,174,364,220,348,239,312,211,280,199,259,156">-->
+        <area shape="poly" (click)="clickSection(4);" data-toggle="modal" data-target="#exampleModal" coords="211,199,240,195,279,199,285,239,279,280,246,285,211,281,204,241"> 
         <area shape="poly" (click)="clickSection(5);" data-toggle="modal" data-target="#exampleModal" coords="107,102,61,124,25,160,4,210,3,259,22,313,64,357,106,375,102,320,116,273,139,241,110,192,102,151">
         <area shape="poly" (click)="clickSection(6);" data-toggle="modal" data-target="#exampleModal" coords="380,102,386,136,383,173,370,209,350,238,379,291,386,329,384,363,381,376,429,354,464,318,484,274,487,222,469,170,431,124">
         <area shape="poly" coords="" onClick="alert('Profession');" >
@@ -88,24 +97,24 @@
       <div class="modal-body">
 
         <!-- Modal Ikigai with jobs-->
-        <div  *ngIf="section == 'Ikigai'">
+        <div  *ngIf="section == 'Découvre peut-être ton futur métier'">
           <div class="row">
             <div class="col-6">
-                <div class="item"><img src="http://placehold.it/220x150" class="img-thumbnail"></div>
+                <div class="item"><img src="https://pngimage.net/wp-content/uploads/2018/06/numero-uno-png-5.png" class="img-thumbnail pict" (click)="clickjobs(1);" data-toggle="modal" data-target="#ModalJobs"></div>
               
             </div>
             <div class="col-6">
-                <div class="item"><img src="http://placehold.it/220x150" class="img-thumbnail"></div>
+                <div class="item"><img src="https://cdn.pixabay.com/photo/2016/06/29/16/31/numbers-1487225_960_720.png" class="img-thumbnail pict" (click)="clickjobs(2);" data-toggle="modal" data-target="#ModalJobs"></div>
               </div>
           </div>
 
           <div class="row">
               <div class="col-6">
-                  <div class="item"><img src="http://placehold.it/220x150" class="img-thumbnail"></div>
+                  <div class="item"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALcAAAETCAMAAABDSmfhAAAAilBMVEX///8AAADz8/PV1dX8/Pz5+fnj4+O8vLxbW1v29vbY2Njg4ODs7Ox4eHjc3NxwcHCZmZmioqLFxcVGRkYvLy9UVFTOzs6Ojo6xsbE1NTW7u7tra2ufn5+srKxNTU2bm5uDg4MxMTEhISE9PT0XFxeRkZF2dnZjY2OAgIAPDw86OjooKCgeHh4SEhIp9UiaAAAMGElEQVR4nO1d23bqNhCVbGMgNjc7NrcABsI9+f/fq2YESWjDAY1G5nQt7Yc8tKXeiNHcZyyEh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHx31EaRqnaRA9m8fDaIezYetVfuMwLjqLZvxsXn9CMNmv5C3kw2bwbIK/IV6Mb3K+4HVYPpvmNaLZ8i7pM7Z/D/V0/yhpjf5fITDx1Iw1YJo8m3WwNWcN2KVPpT2gsQZUz1Pu8ZJOW2H0JNoWh60xf4qw7GxpK0xqZ51+MNCWslcz7ZCFtcKqVlnJuGgr1GhAm4y0axRyXtpSDuqhXTLTlnJRB+2EnbaUM/e02w5oS9l0zvt+eEBC1zHtjhvaUrp1yjkV9zU+Gg5pR85oq8jfYdDfc8hbyswV7a5T2vLUd8R77ZZ3c+jGPeQ3lP+CKKcueOeuefdFw4GT5Vi6AU5cQ8P0Dgku5KQG2gohN213pvIaQ2behHyaOVrqKWteV8WMQBz3ScTFRPI6hy+GBBIRUMxUKIK5lIw5uDdTBgOS0/sZwqM6fLxbRo/Pt1IWkZibE4d7GUu+RLPh08uR+hOmBN7ypBxaNtfQmIGIP5ThNvuVAKC2GMNkY5+qRfTWF8FRiRhb8DMyJlDQEkRHIYaSL4aYmTM4JKK9MQ//N1rnMmX1SUl6pQo35p86BmCcjzy8F+bPH4OQk3KJE/CGeMJkgtUO1Z34mBh/DERrCpX+Z/GuRPxu/il1Iyt1N15YWJN4w9UiqMKOVrobHt7G7gmgR9JDyo+Ndvp62oNW9FvFpCipifaCJZ1PODcJmfLZyfRTu1f8oYI1S6xJ0WciMndPoPig3N/PLpNvRUlCVCTx6uhQlqt2QuANN8w0TFJoRaKhfqicJ8w0D7qgPSwjfd9S+3EsxIfGT++31XetjD8GKl/FPGnOU5E1T5/sSV6VYqtCh2WqTAZPscqcgQowCXX8oVZebDEPRaeFIjD/kAp2IBfRYop5TDX4PlgqL4MUGZdagTKlfwwfXglhfimVawCWQl2N+MQlKqaXrEXKhep4GnIReybeDaPnFxJybQQx6X/dS65sm5EPjpZyRkn2z8/3ki9JeDB4eh87x1rG8TwEspn299mSKEbJnx3Jq5qL5APvdLJiiowBj/7qR4j/32PxYhxgqg+JrfJtlL3sMBa+H/Su1ik6viTxHmg1xFtaix5pG/w44WNbOklphLyl7WWOOpwRwf27+Y6UtyTxHuGFLFF38Rao2vcDxg5SVjGxedJHxZSQfx5CgFVrYe2Q9fFWgXj3CQWeQ4L38hiIiL2T808e1rum3KT1/UKU86bvpZNmlBtZoEH5iZSVtasmhMOuMLA830s3TYXZv6WlyJFyR4l3l1xaHuhETQn5X27x/kJ3NOzBoNF2qm7SvoQHFnubqvIBQ6R4hfYyZC/UX6GHyaXX+6TuY47iF+JvNnbeXk1Lcv/KuyGSz6/4kiuRfBMxT+e91Fx1X4HyY2sYTuKYdJDD+ID3En67jLHw+ifQWh+u0cXvr5zf9BXvZR0gJAH/izetA1/QW3amBK9gPaUxPdsb0IELsJf1jN5Z8670WYfomxS1TYBZ8lbKbx6J5IBBKdzLusYF7XiP0FEPUQcqHa7uZV3jyHa8i7bu+dBJb3Uv3Vp4Ht4zsI0lynWuzvpU21SMHe9DjPp6o+W6BB1Y48gakfcJdMgI/ag8wLMe1mQo7Xgr2z5HdxJkJUN78+pyyoGNtzKSC4xG0zHmHTKuqrxz3nI8WKGsVOgHtmulbacHqx3KSqmEvF7Wtvp7p9zJUyqCGhUgC285zt5rHR/l4i1lvHnK2gj7aePnrC9giBueQpwj3qlZBSI4JmTW/1PezHn6h8AzcvxWO++YhXf9J87EWy5r3qDDxdv9ePQ1SM0av+GzXnNPaI75HbNtDZP0P8DFG8al6jxx82a3Gxiou1KrjMdlmU1mg+G+dbQirk6796wdUSmlhewCGJdyS68RzjbVvtPpVIPyKhWZEqZmvpE79bBeNtf1yWL0Rb0tMyzUkOHsZkZvv/WVVMGFt6xo7YaA09pZ1v5mWaTS/15plzwir+WKOuwjr4g/FoPLr/8kFIlxqz1igqlCdp1yZxZUO6ONNAWlMDNpJLvghOkr7oH0uzsLrpxR2ualCaQKWZVh4/bizy9sf36AxBv+F9mckXb0AG15NRxMXKsDssJ4NR9sKfmhxkiCAtea0y18eCfl9+wkycNNG3PJONJt0PXwXcijaJQp9j6/MqlCk6P7+PoUqeegwLTyiYe3keEuLp+iTGaoeC0RwZFnNYfhQPfyrH+pnuFMiIrF9hg3RA8oX1cjLFDIOfxC4+efTTUplZXx3UvjTQ/NPdZrSIrwNcBzYjhv88xOS4n2kbwZrRSgw+1n6AkBe6lkJCenKPro5luHbBTz0RfRekrifergWEZo3bxOS3ArJd4ZkQJNVJ9d0bCVcMK2ArnE5mRaS2QqoCvPfu6IsuGs1XiFEIC2HC27dOXZgfLoIzbPVsQdekPs2T/YtUfQ6mXrBml6HTDF7p8X2+1h1Me/UCtWKZidUES5nYhT5hHlvADDQbM7pQjGqMPtcrOkRT09+Lo9ot2ZYGhq2wFJazhOQAlS1+R2OLrAibm+Jrlgpd3BdGW5LaegPDuH9rrGksQbOywy6OCsnfcK9G9BLCW/iIaeULNzUCi8DyUeGjHxM0AlZru6hSQn6tkpLSMLAzEtjqkpAu9DB0NE2jfuN3FQDTpQrTQhQZ9MQY2peIt04rOLO7i3mzGmDEG9oRLMKJugMDvYQncwszpvkr3cq3CHRBpQ4ezeu2US3HxKOHjD3n/itFqF7iD4VnaRsXm4k+FTE1rUUKCJDyGkt8sREoKthWgf9RC/OVYJuoNvQmzsqg6mfY2NDbbq0rezoyoBHW6XiDB9Z0MJNmMcUOMNHVkqWfm0LU6ZjPy1CjSV0KpLK6e1wLP5SNHaWiYiTH5xTG71qKYS0MWAFkerLacdjH7wLkpJw2Jf+ATdwUopMktBMQvoByJQPzFp85/COr/s2MnthzQMn32kmXfEDCjPG+gOWg/r2nTwGEIFw0C5C/usrWeQqBkUEhJUJUqHD62rr2ydjXcxe70s5mQZ+HL02p3/ArMeejEnx1xMbYKSR+DBLgNI0TF0VpstryLjE0cEwR8qRWPMUXit5XUCsgkBWlO0c7YFsiyz5nex0EtI0FcoeBoJKbvqzdHDOlqOZoenUZbtVYa3UY0w16PNTsrVgUJ38B5FjNJYinTJueO+BtuT6egOzc72PqMHwdbl/TuGUyxH7THaGXHOdds0694H3sh5BDXXVSASxm0LbnXhKsXkRRdzz7yz/7Suo4cwwtlR2CU6ElEhD6y83b0aqyeiOVbQtCNYMfeAu3vR3h7vfQs9uDF/GzXfaNRPDBcXG/keY62Wnbcbs5ngjXzBtyI3lSPoYvjIyVvrZvh2pBkGspUD0i6IV2fruMe/fYb2jRtgfjOtTiQe25D2PUEnm7O5o/ShPvCH8K535MBdTET86Xr+n2VFGKDCnMMI2+70LlG3S4l44uQxGpkpau8K//ZdTxnHxJrqTzTRyLQhb6zC+CZ6Ve5hu5VtBcIMgh2iUUigaFnLfrPUKgKKBSb4G2tM4GLvW7uu5T4lddjygJIxxFr4/lIMYnxL3V1kJA9xiLEvLsZV4j3Cv5NlnauUVDBhmhHa5GDRwRXJ0E0Lz0JeOwKjisgOVd4W8wN9EeGXUEL+hPUQ6oYGk4fkZQ9Hq7tmlXhv0N/W4v2UfTMIsER/2sc6SaegOdpjkA9wcRIQ8lXK9mojKrqQbEogHVd8Z8tPUGGpMEZPQeNr89gXjSMovhR1eFLX3r4bgKJ6F379PVrTDM5ziT5H/8wwQ82xuLylYQiOzqrmZRa/YQ+HmGGlYHdpnYnhmFtIfyDSA4Q1GU78DfAfO99v+xDCnTpEZa8PsRYKEAc8d+VYb9DKzFEJosNays5fcNZntN+0ckO2ObbObM7HrByndQRKsINJh+epkNvYgkx/SckOEy8j0CJaCbZsO6ecIZ50tM/URG0XgOh3UGxS0c3+HvG4geZoE4u4KKAI3BkqyUhqXYzo4eHh4eHh4eHh4eHh4eHh4eHh4eHh8X/DP092yIs/vhbOAAAAAElFTkSuQmCC" class="img-thumbnail pict" (click)="clickjobs(3);" data-toggle="modal" data-target="#ModalJobs"></div>
                 
               </div>
               <div class="col-6">
-                <div class="item"><img src="http://placehold.it/220x150" class="img-thumbnail"></div>
+                <div class="item"><img src="assets/img/4.png" class="img-thumbnail pict" (click)="clickjobs(4);" data-toggle="modal" data-target="#ModalJobs"></div>
               </div>
             </div>
         </div>
@@ -115,6 +124,29 @@
   </div>
 </div>
 
+<div class="modal fade" id="ModalJobs" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">{{ job }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            {{ description }}
+        </div>
+        <div class="modal-footer">
+            <a style="color:blue" target="_blank" href="{{ onisep }}">Lien du métier sur ONISEP</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   </div>
 </div>
 
+
+
+
+  

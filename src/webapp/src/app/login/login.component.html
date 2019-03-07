@@ -1,28 +1,14 @@
-<div *ngIf="!user">
-    <h1 style="text-align:center">ISENkigAI</h1>
-  </div>
-  
   <div class="jumbotron bg-transparent text-center" >
-    <div *ngIf="!user" class=" text-center container col-8">
-        <blockquote>
-            <p>Ikigai (生き甲斐) est l'équivalent japonais de la « joie de vivre » et de la « raison d'être ».
-                Bien que les significations soient identiques, les attitudes culturelles envers le concept sont différentes.
-            </p>
-            <cite>– Wikipédia</cite>
-        </blockquote>
-       <hr class="col-4 ">
+      <div *ngIf="!user">
+          <img src="assets/img/logo.png" style="margin-top: -7%"class="center">
+          <h1 style="text-align:center;color:black;margin-top: -2%;margin-bottom: -2%">ISENkigAI</h1>
+       
+    
+        <hr class="col-4 " style="margin-top:5%">
+      
       <div class="card-block">
-        <!-- <h4 class="card-title">Non connecté</h4> -->
-        <p>
-          Dites-nous en plus sur vous grâce au <a href="http://m.me/2222007154724380" target="_blank"><b>Chatbot Facebook</b></a> afin de créer votre Ikigai
-        </p>
-        <p>Connectez-vous ensuite pour le consulter</p>
-        
-        <hr class="col-4 ">
-      </div>
-  
-      <div class="card-block">
-          <p>Se connecter avec Facebook:</p>
+          <p style="color:black ">Se connecter avec Facebook:</p>
         <button class="btn btn-social-icon btn-facebook btn-lg btn-block container col-3" (click)="signInWithFB()"><span class="fa fa-facebook"></span></button>
       </div>
     </div>
+  </div>
